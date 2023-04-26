@@ -11,7 +11,6 @@ function regexMovesDescription(textMovesDescription, moves){
             const matchConversionDescription = line.match(/(s\w+Description) *\,/i)
             if(matchConversionDescription){
                 const conversionDescription = matchConversionDescription[1]
-                console.log(conversionDescription)
 
                 if(conversionTable[conversionDescription] === undefined)
                     conversionTable[conversionDescription] = [move]
