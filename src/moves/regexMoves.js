@@ -8,9 +8,10 @@ function regexMovesDescription(textMovesDescription, moves){
             const move = matchMoves[0]
 
 
-            const matchConversionDescription = line.match(/s\w+Description/i)
+            const matchConversionDescription = line.match(/(s\w+Description) *\,/i)
             if(matchConversionDescription){
-                const conversionDescription = matchConversionDescription[0]
+                const conversionDescription = matchConversionDescription[1]
+                console.log(conversionDescription)
 
                 if(conversionTable[conversionDescription] === undefined)
                     conversionTable[conversionDescription] = [move]
@@ -34,8 +35,9 @@ function regexMovesDescription(textMovesDescription, moves){
                 const description = matchDescription[1]
 
                 if(conversionTable[conversionDescription] !== undefined){
-                    for(let i = 0; i < conversionTable[conversionDescription].length; i++)
+                    for(let i = 0; i < conversionTable[conversionDescription].length; i++){
                         moves[conversionTable[conversionDescription][i]]["description"].push(description.replaceAll("\\n", " "))
+                    }
                 }
             }
         }
