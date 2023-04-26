@@ -146,8 +146,10 @@ async function lazyLoading(reset = false){
         for(let i = 0, j = tracker.length; i < j; i++){
             if(counter < target){
                 if(tracker[i]["filter"].length === 0 && !document.getElementById(tracker[i]["key"])){
-                    window[displayFunction](tracker[i]["key"])
-                    counter++
+                    if(!ignore.includes(tracker[i]["key"])){
+                        window[displayFunction](tracker[i]["key"])
+                        counter++
+                    }
                 }
             }
             else{
