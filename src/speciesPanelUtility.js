@@ -197,7 +197,7 @@ async function createSpeciesPanel(name){
 
     if(species[name]["forms"].length > 1){
         for (let i = 0; i < species[name]["forms"].length; i++){
-            if(species[species[name]["forms"][i]]){
+            if(!ignore.includes(species[name]["forms"][i])){
                 speciesFormes.append(createClickableImgAndName(species[name]["forms"][i]))
             }
         }
