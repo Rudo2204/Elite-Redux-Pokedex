@@ -34,9 +34,7 @@ async function getTMHMLearnsets(species){
     const rawTMHMLearnsets = await fetch(`https://raw.githubusercontent.com/${repo}/src/data/pokemon/tmhm_learnsets.h`)
     const textTMHMLearnsets = await rawTMHMLearnsets.text()
 
-    const TMHMLearnsetsConversionTable = getTMHMLearnsetsConversionTable(textTMHMLearnsets)
-
-    return regexTMHMLearnsets(textTMHMLearnsets, TMHMLearnsetsConversionTable, species)
+    return regexTMHMLearnsets(textTMHMLearnsets, species)
 }
 
 async function getEvolution(species){
@@ -65,12 +63,15 @@ async function getEggMovesLearnsets(species){
 
 async function getTutorLearnsets(species){
     footerP("Fetching tutor learnsets")
-    const rawTutorLearnsets = await fetch(`https://raw.githubusercontent.com/${repo}/src/data/pokemon/tutor_learnsets.h`)
-    const textTutorLearnsets = await rawTutorLearnsets.text()
+    const rawTutorLearnsets = await fetch("https://raw.githubusercontent.com/ydarissep/inclement-emerald-pokedex/main/src/species/tutorLearnsets.json");
+    const tutorLearnsets = await rawTutorLearnsets.json()
 
-    const tutorLearnsetsConversionTable = getTutorLearnsetsConversionTable(textTutorLearnsets)
+    const rawMoves = await fetch(`https://raw.githubusercontent.com/${repo}/include/constants/moves.h`)
+    const textMoves = await rawMoves.text()
 
-    return regexTutorLearnsets(textTutorLearnsets, tutorLearnsetsConversionTable, species)
+    const tutorLearnsetsConversionTable = getTutorLearnsetsConversionTable(textMoves)
+
+    return regexTutorLearnsets(tutorLearnsets, tutorLearnsetsConversionTable, species)
 }
 
 async function getSprite(species){

@@ -339,45 +339,14 @@ function regexLevelUpLearnsets(textLevelUpLearnsets, conversionTable, species){
 
 
 
-function getTMHMLearnsetsConversionTable(textTMHMLearnsetsPointers){
-    const lines = textTMHMLearnsetsPointers.split("\n")
-    let conversionTable = {}
+function regexTMHMLearnsets(textTMHMLearnsets, species){
+    const lines = textTMHMLearnsets.split("\n")
+    let name = null
 
     lines.forEach(line => {
-
         const matchSpecies = line.match(/SPECIES_\w+/i)
         if(matchSpecies){
-            const value = matchSpecies[0]
-
-
-            const matchConversion = line.match(/s\w+TMHMLearnset/i)
-            if(matchConversion){
-                const index = matchConversion[0]
-
-
-                if(conversionTable[index] === undefined) // DO NOT TOUCH THAT FUTURE ME, THIS IS THE WAY, DON'T QUESTION ME
-                    conversionTable[index] = [value]
-                else // DO NOT TOUCH THAT FUTURE ME, THIS IS THE WAY, DON'T QUESTION ME
-                    conversionTable[index].push(value)
-            }
-        }
-    })
-    return conversionTable
-}
-
-
-
-function regexTMHMLearnsets(textTMHMLearnsets, conversionTable, species){
-    const lines = textTMHMLearnsets.split("\n")
-    let speciesArray = []
-
-    lines.forEach(line => {
-        const matchConversion = line.match(/s\w+TMHMLearnset/i)
-        if(matchConversion){
-            const index = matchConversion[0]
-            if(index in conversionTable){
-                speciesArray = conversionTable[index]
-            }
+            name = matchSpecies[0]
         }
 
 
@@ -386,17 +355,13 @@ function regexTMHMLearnsets(textTMHMLearnsets, conversionTable, species){
             const TMHM = matchTmhmMove[1]
             let move = matchTmhmMove[2]
             if(move === "SOLARBEAM")
-                move = "SOLAR_BEAM"
-            else if(move === "SWAMPY_TERRAIN"){
-                move = "SWAMP_TERRAIN"
-            }
+                move = "SOLAR_BEAM" // Fuck Oldplayer :)
             move = `MOVE_${move}`
 
-
-            for(let i = 0; i < speciesArray.length; i++)
-                species[speciesArray[i]]["TMHMLearnsets"].push([move, TMHM])
+            species[name]["TMHMLearnsets"].push([move, TMHM])
         }
     })
+
     return altFormsLearnsets(species, "forms", "TMHMLearnsets")
 }
 
@@ -594,59 +559,38 @@ function regexSprite(textSprite, conversionTable, species){
 
 
 
-function getTutorLearnsetsConversionTable(textTutorLearnsetsPointers){
-    const lines = textTutorLearnsetsPointers.split("\n")
+function getTutorLearnsetsConversionTable(textMoves){
+    const lines = textMoves.split("\n")
     let conversionTable = {}
 
     lines.forEach(line => {
-
-        const matchSpecies = line.match(/SPECIES_\w+/i)
-        if(matchSpecies){
-            const value = matchSpecies[0]
-
-
-            const matchConversion = line.match(/s\w+TutorLearnset/i)
-            if(matchConversion){
-                const index = matchConversion[0]
-
-
-                if(conversionTable[index] === undefined) // DO NOT TOUCH THAT FUTURE ME, THIS IS THE WAY, DON'T QUESTION ME
-                    conversionTable[index] = [value]
-                else // DO NOT TOUCH THAT FUTURE ME, THIS IS THE WAY, DON'T QUESTION ME
-                    conversionTable[index].push(value)
-            }
+        const matchMoveID = line.match(/#define *(MOVE_\w+) *(\d+)/i)
+        if(matchMoveID){
+            const move = matchMoveID[1]
+            const ID = matchMoveID[2]
+            conversionTable[ID] = move
         }
     })
     return conversionTable
 }
 
-
-
-function regexTutorLearnsets(textTutorLearnsets, conversionTable, species){
-    const lines = textTutorLearnsets.split("\n")
-    let speciesArray = []
-
-    lines.forEach(line => {
-        const matchConversion = line.match(/s\w+TutorLearnset/i)
-        if(matchConversion){
-            const index = matchConversion[0]
-            if(index in conversionTable){
-                speciesArray = conversionTable[index]
+function regexTutorLearnsets(tutorLearnsets, conversionTable, species){
+    for (const name of Object.keys(species)){
+        const speciesID = species[name]["ID"]
+        if(speciesID in tutorLearnsets){
+            for (let i = 0; i < tutorLearnsets[speciesID].length; i++){
+                const move = conversionTable[tutorLearnsets[speciesID][i]]
+                species[name]["tutorLearnsets"].push(move)
+            }
+            if(species[name]["tutorLearnsets"].length === 0){
+                const targetSpecies = species[name]["forms"][0]
+                if(targetSpecies !== undefined){
+                    species[name]["tutorLearnsets"] = species[targetSpecies]["tutorLearnsets"]
+                }
             }
         }
-
-
-        const matchTutorMove = line.match(/TUTOR *\( *(\w+) *\)/i)
-        if(matchTutorMove){
-            let move = matchTutorMove[1]
-            move = `MOVE_${move}`
-
-            for(let i = 0; i < speciesArray.length; i++){
-                species[speciesArray[i]]["tutorLearnsets"].push(move)
-            }
-        }
-    })
-    return altFormsLearnsets(species, "forms", "tutorLearnsets")
+    }
+    return species
 }
 
 

@@ -75,11 +75,9 @@ function appendMovesToTable(moveName){
 
 
     descriptionContainer.className = "description"
-    for(let j = 0; j < moves[moveName]["description"].length; j++){
-        let description = document.createElement("div")
-        description.innerText += moves[moveName]["description"][j].replace(/\\n/g, " ").replace(/\\/g, "")
-        descriptionContainer.append(description)
-    }
+    let description = document.createElement("div")
+    description.innerText = JSON.stringify(moves[moveName]["description"]).replaceAll(/\",\"|\[\"|\"\]/g, "")
+    descriptionContainer.append(description)
 
     effectContainer.append(descriptionContainer)
 
