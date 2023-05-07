@@ -371,12 +371,14 @@ function createFilterArray(objInputArray, obj, sanitize = true){
     let list = []
     for (const name of Object.keys(obj)){
         for (let i = 0; i < objInputArray.length; i++){
-            let value = obj[name][objInputArray[i]]
-            if(sanitize){
-                value = sanitizeString(value)
-            }
-            if(!list.includes(value)){
-                list.push(value)
+            if(!ignore.includes(name)){
+                let value = obj[name][objInputArray[i]]
+                if(sanitize){
+                    value = sanitizeString(value)
+                }
+                if(!list.includes(value)){
+                    list.push(value)
+                }
             }
         }
     }
