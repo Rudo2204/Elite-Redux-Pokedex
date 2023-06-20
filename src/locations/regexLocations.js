@@ -50,6 +50,30 @@ function regexWildLocations(jsonWildLocations, locations){
 
 
 
+function regexGameCornerLocations(textGameCornerLocations, locations){
+	const zone = "Mauville City", method = "Game Corner"
+	
+	if(!(zone in locations)){
+		locations[zone] = {}
+	}
+
+	if(!(method in locations[zone])){
+		locations[zone][method] = {}
+	}
+
+	const speciesArray = textGameCornerLocations.match(/SPECIES_\w+/g)
+
+	for(let i = 0; i < speciesArray.length; i++){
+		locations[zone][method][speciesArray[i]] = 100
+	}
+
+    return locations
+}
+
+
+
+
+
 function replaceMethodString(method, index){
 	if(method.match(/fish/i)){
 		if(index >=0 && index <= 1)
