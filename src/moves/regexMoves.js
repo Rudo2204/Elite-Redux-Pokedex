@@ -8,7 +8,7 @@ function regexMovesDescription(textMovesDescription, moves){
             const move = matchMoves[0]
 
 
-            const matchConversionDescription = line.match(/(s\w+Description) *\,/i)
+            const matchConversionDescription = line.match(/(sMoveFourLineDescription_\w+) *\,/i)
             if(matchConversionDescription){
                 const conversionDescription = matchConversionDescription[1]
 
@@ -21,7 +21,7 @@ function regexMovesDescription(textMovesDescription, moves){
     })
 
     lines.forEach(line => { // second go with conversionTable
-        const matchConversionDescription = line.match(/static *const *u\d+ *(s\w+Description)/i)
+        const matchConversionDescription = line.match(/static *const *u\d+ *(sMoveFourLineDescription_\w+)/i)
         if(matchConversionDescription && conversionDescription !== matchConversionDescription[1]){
             conversionDescription = matchConversionDescription[1]
 
