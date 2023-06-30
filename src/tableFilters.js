@@ -99,7 +99,7 @@ function filterType(value, label){
             name = tracker[i]["key"].split("\\")[2]
         }
         if(table === speciesTable || table === locationsTable){
-            if(!(sanitizeString(species[name]["type1"]) === value) && !(sanitizeString(species[name]["type2"]) === value)){
+            if(!(sanitizeString(species[name]["type1"]) === value) && !(sanitizeString(species[name]["type2"]) === value) && !(sanitizeString(speciesHasType3(species[name])) === value)){
                 tracker[i]["filter"].push(`filter${label}${value}`.replaceAll(" ", ""))
             }
         }
