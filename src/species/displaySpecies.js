@@ -44,11 +44,14 @@ function appendSpeciesToTable(speciesName){
     let types = document.createElement("div")
     let type1 = document.createElement("div")
     let type2 = document.createElement("div")
+    let type3 = document.createElement("div")
     typesContainer.className = "types"
     type1.innerText = `${sanitizeString(species[speciesName]["type1"])} `
     type2.innerText = `${sanitizeString(species[speciesName]["type2"])} `
+    type3.innerText = `${sanitizeString(speciesHasType3(species[speciesName]))} `
     type1.className = `${species[speciesName]["type1"]} background`
     type2.className = `${species[speciesName]["type2"]} background`
+    type3.className = `${speciesHasType3(species[speciesName])} background`
 
     for (let k = 0; k < species[speciesName]["changes"].length; k++){
         if(species[speciesName]["changes"][k][0] === "type1"){
@@ -66,6 +69,9 @@ function appendSpeciesToTable(speciesName){
     types.append(type1)
     if(species[speciesName]["type1"] !== species[speciesName]["type2"]){
         types.append(type2)
+    }
+    if(speciesHasType3(species[speciesName]) && speciesHasType3(species[speciesName]) !== species[speciesName]["type1"] && speciesHasType3(species[speciesName]) !== species[speciesName]["type2"]){
+        types.append(type3)
     }
     typesContainer.append(types)
     row.append(typesContainer)

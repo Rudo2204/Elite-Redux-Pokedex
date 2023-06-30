@@ -145,7 +145,7 @@ input[type="search"]:focus, input[type="search"]:hover {
 }
 
 @media 
-only screen and (max-width: 1300px) {
+only screen and (max-width: 1500px) {
     .utilityButton {
         right: 5px !important;
     }
