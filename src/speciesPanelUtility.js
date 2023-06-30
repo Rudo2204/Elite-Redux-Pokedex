@@ -12,6 +12,7 @@ const speciesPanelInputSpeciesDataList = document.getElementById("speciesPanelIn
 const speciesSprite = document.getElementById("speciesSprite")
 const speciesType1 = document.getElementById("speciesType1")
 const speciesType2 = document.getElementById("speciesType2")
+const speciesType3 = document.getElementById("speciesType3")
 const speciesAbilities = document.getElementById("speciesAbilities")
 const speciesInnates = document.getElementById("speciesInnates")
 const speciesBaseStatsGraph = document.getElementById("speciesBaseStatsGraph")
@@ -53,6 +54,15 @@ async function createSpeciesPanel(name){
     else
         speciesType2.classList.remove("hide")
 
+    
+        if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
+        speciesType3.innerText = sanitizeString(speciesHasType3(species[name]))
+        speciesType3.className = `${speciesHasType3(species[name])} background`
+        speciesType3.classList.remove("hide")
+    }
+    else{
+        speciesType3.classList.add("hide")
+    }
 
 
 
@@ -307,10 +317,20 @@ async function createSpeciesPanel(name){
         checkType.innerText = sanitizeString(type)
         checkType.className = `background2 ${type}`
         if((species[name]["type1"] !== species[name]["type2"]) && species[name]["type2"] !== undefined){
-            typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][species[name]["type2"]]
+            if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
+                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][species[name]["type2"]]*typeChart[type][speciesHasType3(species[name])]
+            }
+            else{
+                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][species[name]["type2"]]
+            }
         }
         else{
-            typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]
+            if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
+                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][speciesHasType3(species[name])]
+            }
+            else{
+                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]
+            }
         }
         typeEffectivenessValue.className = `typeChart${typeEffectivenessValue.innerText} background3`
         typeEffectivenessContainer.append(checkType)

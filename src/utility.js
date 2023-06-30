@@ -60,7 +60,7 @@ async function fetchTypeChart(){
 
 
 async function forceUpdate(){
-    const update = 6
+    const update = 7
     if(localStorage.getItem("update") != `${update} EliteR`){
         await localStorage.clear()
         await localStorage.setItem("update", `${update} EliteR`)
@@ -348,6 +348,42 @@ function speciesCanLearnMove(speciesObj, moveName){
 
 
 
+
+
+
+
+
+
+
+function speciesHasType3(speciesObj){
+    for(let i = 0, j = speciesObj["innates"].length; i < j; i++){
+        if(speciesObj["innates"][i] === "ABILITY_TERAVOLT"){
+            return "TYPE_ELECTRIC"
+        }
+        else if(speciesObj["innates"][i] === "ABILITY_TURBOBLAZE"){
+            return "TYPE_FIRE"
+        }
+        else if(speciesObj["innates"][i] === "ABILITY_AQUATIC"){
+            return "TYPE_WATER"
+        }
+        else if(speciesObj["innates"][i] === "ABILITY_DRAGONFLY" || speciesObj["innates"][i] === "ABILITY_HALF_DRAKE"){
+            return "TYPE_DRAGON"
+        }
+        else if(speciesObj["innates"][i] === "ABILITY_GROUNDED"){
+            return "TYPE_GROUND"
+        }
+        else if(speciesObj["innates"][i] === "ABILITY_ICE_AGE"){
+            return "TYPE_ICE"
+        }
+        else if(speciesObj["innates"][i] === "ABILITY_METALLIC"){
+            return "TYPE_STEEL"
+        }
+        else if(speciesObj["innates"][i] === "ABILITY_PHANTOM"){
+            return "TYPE_GHOST"
+        }
+    }
+    return false
+}
 
 
 

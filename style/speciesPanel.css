@@ -211,7 +211,7 @@
 	background: rgba(0, 0, 0, 0.7);
 }
 
-.typeChart0\.25 {
+.typeChart0\.25, .typeChart0\.125 {
 	background: rgb(100, 221, 23);
 }
 
@@ -223,7 +223,7 @@
 	background: rgba(239, 83, 80, 0.7);
 }
 
-.typeChart4 {
+.typeChart4, .typeChart8 {
 	background: rgb(239, 83, 80);
 }
 
