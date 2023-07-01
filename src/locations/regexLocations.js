@@ -108,7 +108,7 @@ function replaceMethodString(method, index){
 
 
 function returnRarity(method, index){
-	if(method === "Morning" || method === "Day" || method === "Night" || method === "Surfing"){
+	if(method === "Morning" || method === "Day" || method === "Night"){
 		if(index === 0 || index === 1)
 			return 20
 		else if(index >= 2 && index <= 5){
@@ -122,6 +122,18 @@ function returnRarity(method, index){
 		}
 		else if(index >= 10 || index <= 11){
 			return 1
+		}
+		else
+			return 100
+	}
+	else if(method === "Surfing"){
+		if(index === 0)
+			return 60
+		else if(index === 1){
+			return 30
+		}
+		else if(index >= 2 && index <= 3){
+			return 5
 		}
 		else
 			return 100
