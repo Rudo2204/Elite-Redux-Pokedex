@@ -21,8 +21,8 @@ function regexSpecies(textSpecies, species){
                 species[name] = {}
                 species[name]["name"] = name
 
-
-                if(Number.isInteger(formsStart))
+                
+                if(formsStart && /FORMS_START/i.test(line))
                     species[name]["ID"] = ID+formsStart
                 else
                     species[name]["ID"] = ID
