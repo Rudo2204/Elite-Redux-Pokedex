@@ -1,7 +1,7 @@
 function regexWildLocations(jsonWildLocations, locations){
 
 	const wildEncounters = jsonWildLocations["wild_encounter_groups"][0]["encounters"]
-	const methodArrayWild = ["land_morning_mons", "land_mons", "land_night_mons", "water_mons", "rock_smash_mons", "fishing_mons", "honey_mons"]
+	const methodArrayWild = ["land_morning_mons", "land_mons", "land_night_mons", "water_mons", "rock_smash_mons", "fishing_mons", "honey_mons", /*"hidden_mons"*/]
 
 	for(let i = 0; i < wildEncounters.length; i++)
 	{
@@ -98,10 +98,16 @@ function replaceMethodString(method, index){
 		return "Night"
 	}
 	else if(method.match(/land/i)){
+		return "Land"
+	}
+	else if(method.match(/day/i)){
 		return "Day"
 	}
 	else if(method.match(/honey/i)){
 		return "Honey"
+	}
+	else if(method.match(/hidden/i)){
+		return "Hidden"
 	}
     else{
     	console.log(method)
@@ -111,7 +117,7 @@ function replaceMethodString(method, index){
 
 
 function returnRarity(method, index){
-	if(method === "Morning" || method === "Day" || method === "Night"){
+	if(method === "Morning" || method === "Day" || method === "Night" || method === "Land"){
 		if(index === 0 || index === 1)
 			return 20
 		else if(index >= 2 && index <= 5){
@@ -195,6 +201,14 @@ function returnRarity(method, index){
 			return 5
 		else 
 			return 100
+	}
+	else if(method === "Hidden"){
+		if(index >= 0 && index <= 1){
+			return 33
+		}
+		else if(index === 2){
+			return 34
+		}
 	}
     else{
         return 100

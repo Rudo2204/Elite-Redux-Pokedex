@@ -99,6 +99,9 @@ function returnMethodSprite(method){
     else if(method.match(/sprouted|taller|flowering|berries/i)){
         return "Berry"
     }
+    else if(method === "Hidden"){
+        return "Gift"
+    }
     else{
         return method
     }
