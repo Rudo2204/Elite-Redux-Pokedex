@@ -1,7 +1,7 @@
 function regexWildLocations(jsonWildLocations, locations){
 
 	const wildEncounters = jsonWildLocations["wild_encounter_groups"][0]["encounters"]
-	const methodArrayWild = ["land_morning_mons", "land_mons", "land_night_mons", "water_mons", "rock_smash_mons", "fishing_mons"]
+	const methodArrayWild = ["land_morning_mons", "land_mons", "land_night_mons", "water_mons", "rock_smash_mons", "fishing_mons", "honey_mons"]
 
 	for(let i = 0; i < wildEncounters.length; i++)
 	{
@@ -100,6 +100,9 @@ function replaceMethodString(method, index){
 	else if(method.match(/land/i)){
 		return "Day"
 	}
+	else if(method.match(/honey/i)){
+		return "Honey"
+	}
     else{
     	console.log(method)
         return method
@@ -138,25 +141,36 @@ function returnRarity(method, index){
 		else
 			return 100
 	}
+	else if(method === "Honey"){
+		if(index === 0)
+			return 50
+		else if(index >= 1 && index <= 2){
+			return 15
+		}
+		else if(index === 3){
+			return 10
+		}
+		else if(index >= 4 && index <= 5){
+			return 5
+		}
+		else
+			return 100
+	}
 	else if(method === "Rock Smash"){
 		if(index === 0)
-			return 40
+			return 60
 		else if(index === 1)
 			return 30
-		else if(index === 2)
-			return 15
-		else if(index === 3)
-			return 10
-		else if(index === 4)
+		else if(index >= 2 && index <= 3)
 			return 5
 		else
 			return 100
 	}
 	else if(method === "Old Rod"){
 		if(index === 0)
-			return 70
+			return 60
 		else if(index === 1)
-			return 30
+			return 40
 		else 
 			return 100
 	}
@@ -169,14 +183,16 @@ function returnRarity(method, index){
 			return 100
 	}
 	else if(method === "Super Rod"){
-		if(index === 5 || index === 6)
+		if(index === 5)
 			return 40
+		else if(index === 6)
+			return 30
 		else if(index === 7)
 			return 15
 		else if(index === 8)
-			return 4
+			return 10
 		else if(index === 9)
-			return 1
+			return 5
 		else 
 			return 100
 	}
