@@ -61,7 +61,7 @@ async function fetchTypeChart(){
 
 
 async function forceUpdate(){
-    const update = 10
+    const update = 11
     if(localStorage.getItem("update") != `${update} EliteR`){
         await localStorage.clear()
         await localStorage.setItem("update", `${update} EliteR`)
