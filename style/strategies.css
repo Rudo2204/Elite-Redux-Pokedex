@@ -1,0 +1,41 @@
+.strategyInfo {
+    border: 1px solid #424242;
+    background: rgb(29, 29, 29);
+    box-shadow: 3px 3px 3px #121212;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 1em 2em;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.strategyTableContainer {
+    margin: .5em 0;
+    display: flex;
+    align-items: center;
+    min-width: 200px;
+    flex: 1 0 200px;
+}
+
+.strategyTable {
+    margin: initial;
+    border-spacing: 0;
+}
+
+.strategyLabel {
+    text-align: right;
+}
+
+.strategyData {
+    padding-left: 1em;
+    text-align: initial;
+}
+
+.strategyTr{
+    background: initial !important;
+}
+
+.strategyName {
+    text-align: center !important;
+}

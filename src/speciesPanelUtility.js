@@ -26,6 +26,8 @@ const speciesChanges = document.getElementById("speciesChanges")
 const speciesHeldItemsContainer = document.getElementById("speciesHeldItemsContainer")
 const speciesChangesContainer = document.getElementById("speciesChangesContainer")
 const speciesTypeChart = document.getElementById("speciesTypeChart")
+const speciesStrategiesContainer = document.getElementById("speciesStrategiesContainer")
+const speciesStrategies = document.getElementById("speciesStrategies")
 const speciesPanelLevelUpTableTbody = document.getElementById("speciesPanelLevelUpTableTbody")
 const speciesPanelTMHMTableTbody = document.getElementById("speciesPanelTMHMTableTbody")
 const speciesPanelTutorTableTbody = document.getElementById("speciesPanelTutorTableTbody")
@@ -341,6 +343,33 @@ async function createSpeciesPanel(name){
 
 
 
+
+
+
+    
+    if(strategies[name]){
+        speciesStrategiesContainer.classList.remove("hide")
+        while(speciesStrategies.firstChild){
+            speciesStrategies.removeChild(speciesStrategies.firstChild)
+        }
+        for(let i = 0; i < strategies[name].length; i++){
+            speciesStrategies.append(createSpeciesStrategy(strategies[name][i], name))
+        }
+    }
+    else{
+        speciesStrategiesContainer.classList.add("hide")
+    }
+
+    
+
+
+
+
+
+
+
+
+
     while(speciesPanelLevelUpTableTbody.firstChild)
         speciesPanelLevelUpTableTbody.removeChild(speciesPanelLevelUpTableTbody.firstChild)
     buildSpeciesPanelLearnsetsTable(speciesPanelLevelUpTableTbody, name, "levelUpLearnsets")
@@ -540,6 +569,104 @@ function replaceStatString(stat){
 
 
 
+
+
+function createSpeciesStrategy(strategy, speciesName){
+    const strategyContainer = document.createElement("div")
+    const strategyName = document.createElement("h3"); strategyName.className = "strategyName"
+    const strategyInfo = document.createElement("div"); strategyInfo.className = "strategyInfo"
+    const strategyMoves = document.createElement("div"); strategyMoves.className = "strategyTableContainer"
+    const strategyMovesTable = document.createElement("table"); strategyMovesTable.className = "strategyTable"
+    const strategyMovesTbody = document.createElement("Tbody")
+    const strategyMisc = document.createElement("div"); strategyMisc.className = "strategyTableContainer"
+    const strategyMiscTable = document.createElement("table"); strategyMiscTable.className = "strategyTable"
+    const strategyMiscTbody = document.createElement("Tbody")
+    
+    strategyName.innerText = strategy["name"]
+    strategyContainer.append(strategyName)
+
+    strategyMoves.append(strategyMovesTable)
+    strategyMovesTable.append(strategyMovesTbody)
+    strategyMisc.append(strategyMiscTable)
+    strategyMiscTable.append(strategyMiscTbody)
+
+    for(let i = 0; i < strategy["moves"].length; i++){
+        strategyMovesTbody.append(createStrategyMove(i, strategy["moves"][i]))
+    }
+    strategyMiscTbody.append(createStrategyMisc("Item", strategy["item"], speciesName))
+    strategyMiscTbody.append(createStrategyMisc("Ability", strategy["ability"], speciesName))
+    strategyMiscTbody.append(createStrategyMisc("Nature", strategy["nature"], speciesName))
+    strategyMiscTbody.append(createStrategyMisc("EVs", strategy["evs"], speciesName))
+
+
+    strategyInfo.append(strategyMoves)
+    strategyInfo.append(strategyMisc)
+    strategyContainer.append(strategyInfo)
+    
+
+    return strategyContainer
+}
+
+
+
+
+
+
+function createStrategyMove(num, move){
+    const moveContainer = document.createElement("tr"); moveContainer.className = "strategyTr"
+    const moveNum = document.createElement("td"); moveNum.className = "strategyLabel"
+    const moveName = document.createElement("td"); moveName.className = "strategyData"
+
+    moveNum.innerText = `Move ${num + 1}:`
+    moveName.innerText = sanitizeString(move)
+    moveContainer.append(moveNum)
+    moveContainer.append(moveName)
+    return moveContainer
+}
+
+
+
+
+
+
+
+function createStrategyMisc(label, value, speciesName){
+    const miscContainer = document.createElement("tr"); miscContainer.className = "strategyTr"
+    const miscLabel = document.createElement("td"); miscLabel.className = "strategyLabel"
+    const miscValue = document.createElement("td"); miscValue.className = "strategyData"
+
+    miscLabel.innerText = `${label}:`
+    if(label === "Ability"){
+        miscValue.innerText = sanitizeString(species[speciesName]["abilities"][value])
+    }
+    else if(label === "EVs"){
+        for(let i = 0; i < value.length; i++){
+            if(value[i] > 0){
+                if(!miscValue.innerText == ""){
+                    miscValue.innerText += " / "
+                }
+                if(i === 0)
+                    miscValue.innerText += `${value[i]} HP`
+                else if(i === 1)
+                    miscValue.innerText += `${value[i]} Atk`
+                else if(i === 2)
+                    miscValue.innerText += `${value[i]} Def`
+                else if(i === 3)
+                    miscValue.innerText += `${value[i]} SpA`
+                else if(i === 4)
+                    miscValue.innerText += `${value[i]} SpD`
+                else if(i === 5)
+                    miscValue.innerText += `${value[i]} Spe`
+            }
+        }
+    }
+    else{
+        miscValue.innerText = sanitizeString(value)
+    }
+    miscContainer.append(miscLabel)
+    miscContainer.append(miscValue)
+    return miscContainer
+}
 
 
 

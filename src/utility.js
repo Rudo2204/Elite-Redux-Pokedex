@@ -1,5 +1,5 @@
 function sanitizeString(string){
-    const regex = /^SPECIES_|^TYPE_|^ABILITY_|^MOVE_|^SPLIT_|FLAG_|^EFFECT_|^Z_EFFECT|^ITEM_|^EGG_GROUP_|^EVO_|^MAP_/ig
+    const regex = /^SPECIES_|^TYPE_|^ABILITY_|^MOVE_|^SPLIT_|FLAG_|^EFFECT_|^Z_EFFECT|^ITEM_|^EGG_GROUP_|^EVO_|^MAP_|^NATURE_/ig
     const unsanitizedString = string.toString().replace(regex, "")
     let matchArray = unsanitizedString.match(/\w+/g)
     if(matchArray){
@@ -36,6 +36,7 @@ async function fetchData(){
     await fetchSpeciesObj()
     await fetchTypeChart()
     await fetchLocationsObj()
+    await fetchStrategiesObj()
 
     await setDataList()
     await setFilters()

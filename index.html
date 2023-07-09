@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="style/movesTable.css">
   <link rel="stylesheet" href="style/locationsTable.css">
   <link rel="stylesheet" href="style/speciesPanel.css">
+  <link rel="stylesheet" href="style/strategies.css">
   <script defer src="src/species/displaySpecies.js"></script>
   <script defer src="src/species/fetchSpecies.js"></script>
   <script defer src="src/species/regexSpecies.js"></script>
@@ -25,6 +26,8 @@
   <script defer src="src/locations/displayLocations.js"></script>
   <script defer src="src/locations/fetchLocations.js"></script>
   <script defer src="src/locations/regexLocations.js"></script>
+  <script defer src="src/strategies/fetchStrategies.js"></script>
+  <script defer src="src/strategies/regexStrategies.js"></script>
   <script defer src="src/lz-string.js"></script>
   <script defer src="src/tableFilters.js"></script>
   <script defer src="src/utility.js"></script>
@@ -124,6 +127,10 @@
     </div>
     <div id="speciesTypeChartContainer" class="flex flexCenter">
       <div id="speciesTypeChart" class="flex wrap"></div>
+    </div>
+    <div id="speciesStrategiesContainer">
+      <h2 class="strategyName">Strategies</h2>
+      <div id="speciesStrategies"></div>
     </div>
     <div id="speciesPanelTablesContainer">
       <table id="speciesPanelLevelUpTable" class="speciesPanelLearnsetsTableMargin">
