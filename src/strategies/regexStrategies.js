@@ -75,8 +75,11 @@ async function regexStrategies(textStrategies, strategies){
                     strategies[name][i]["moves"] = line.match(/= *(.*)/i)[1].split(",")
                 }
             }
+            else if(/tags *=/i.test(line)){
+                strategies[name][i]["tags"] = line.match(/= *(.*)/i)[1].split(",")
+            }
             else if(/comment *=/i.test(line) && !inComment){
-                strategies[name][i]["comment"] = line.match(/= *(.*)/i)[1]
+                strategies[name][i]["comment"].push(line.match(/= *(.*)/i)[1])
                 inComment = true
             }
             else if(inComment){
@@ -84,7 +87,7 @@ async function regexStrategies(textStrategies, strategies){
                     inComment = false
                 }
                 else{
-                    strategies[name][i]["comment"] += line
+                    strategies[name][i]["comment"].push(line)
                 }
             }
         }
@@ -118,5 +121,6 @@ function createAndInitializeSetForSpecies(strategies, name){
     strategies[name][i]["evs"] = []
     strategies[name][i]["nature"] = ""
     strategies[name][i]["moves"] = []
-    strategies[name][i]["comment"] = ""
+    strategies[name][i]["comment"] = []
+    strategies[name][i]["tags"] = ""
 }

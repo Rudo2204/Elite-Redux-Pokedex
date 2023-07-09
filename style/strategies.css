@@ -37,7 +37,7 @@
     background: initial !important;
 }
 
-.strategyName {
+.strategyName, .strategyTagsContainer {
     text-align: center !important;
 }
 
@@ -45,7 +45,7 @@
     vertical-align: middle;
 }
 
-.strategyComment {
+.strategyCommentContainer {
     padding-top: 25px;
     font-size: 17px;
 }
@@ -54,4 +54,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.strategyTag {
+    padding-left: 50px;
 }

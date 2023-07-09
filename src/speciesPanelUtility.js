@@ -576,6 +576,7 @@ function createSpeciesStrategy(strategy, speciesName){
     const strategyName = document.createElement("h3"); strategyName.className = "strategyName"
     const strategySpriteContainer = document.createElement("span"); strategySpriteContainer.className = "strategySpriteContainer"
     const strategySprite = document.createElement("img"); strategySprite.className = `miniSprite sprite${speciesName} strategySprite`
+    const strategyTagsContainer = document.createElement("div"); strategyTagsContainer.className = "strategyTagsContainer"
     const strategyInfo = document.createElement("div"); strategyInfo.className = "strategyInfo"
     const strategyMoves = document.createElement("div"); strategyMoves.className = "strategyTableContainer"
     const strategyMovesTable = document.createElement("table"); strategyMovesTable.className = "strategyTable"
@@ -583,13 +584,18 @@ function createSpeciesStrategy(strategy, speciesName){
     const strategyMisc = document.createElement("div"); strategyMisc.className = "strategyTableContainer"
     const strategyMiscTable = document.createElement("table"); strategyMiscTable.className = "strategyTable"
     const strategyMiscTbody = document.createElement("Tbody")
-    const strategyComment = document.createElement("div"); strategyComment.className = "strategyComment"
+    const strategyCommentContainer = document.createElement("div"); strategyCommentContainer.className = "strategyCommentContainer"
     
     strategyName.innerText = strategy["name"]
     strategySpriteContainer.append(strategySprite)
     strategySprite.src = sprites[speciesName]
     strategySpriteContainer.append(strategyName)
     strategyContainer.append(strategySpriteContainer)
+    strategyContainer.append(strategyTagsContainer)
+
+    for(let i = 0; i < strategy["tags"].length; i++){
+        strategyTagsContainer.append(createStrategyTags(sanitizeString(strategy["tags"][i].trim())))
+    }
 
     strategyMoves.append(strategyMovesTable)
     strategyMovesTable.append(strategyMovesTbody)
@@ -604,16 +610,61 @@ function createSpeciesStrategy(strategy, speciesName){
     strategyMiscTbody.append(createStrategyMisc("Nature", strategy["nature"], speciesName))
     strategyMiscTbody.append(createStrategyMisc("EVs", strategy["evs"], speciesName))
 
-    strategyComment.innerText = strategy["comment"]
+    for(let i = 0; i < strategy["comment"].length; i++){
+        const strategyComment = document.createElement("div")
+        if(strategy["comment"][i] === ""){
+            strategyComment.append(document.createElement("br"))
+        }
+        else{
+            strategyComment.innerText = strategy["comment"][i]
+        }
+        strategyCommentContainer.append(strategyComment)
+    }
 
     strategyInfo.append(strategyMoves)
     strategyInfo.append(strategyMisc)
-    strategyInfo.append(strategyComment)
+    strategyInfo.append(strategyCommentContainer)
     strategyContainer.append(strategyInfo)
     
 
     return strategyContainer
 }
+
+
+
+
+
+
+function createStrategyTags(tag){
+    const strategyTag = document.createElement("span"); strategyTag.className = "strategyTag"
+
+    if(tag === "Defensive"){
+        strategyTag.innerText = "🛡️ Defensive"
+    }
+    else if(tag === "Offensive"){
+        strategyTag.innerText = "⚔️ Offensive"
+    }
+    else if(tag === "Singles"){
+        strategyTag.innerText = "1️⃣ Singles"
+    }
+    else if(tag === "Doubles"){
+        strategyTag.innerText = "2️⃣ Singles"
+    }
+    else if(tag === "Mixed"){
+        strategyTag.innerText = "⛈️ Singles"
+    }
+    else if(tag === "Troll"){
+        strategyTag.innerText = "🤣 Singles"
+    }
+    else{
+        strategyTag.innerText = tag
+    }
+
+    return strategyTag
+}
+
+
+
 
 
 
