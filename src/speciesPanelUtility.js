@@ -591,10 +591,12 @@ function createSpeciesStrategy(strategy, speciesName){
     strategySprite.src = sprites[speciesName]
     strategySpriteContainer.append(strategyName)
     strategyContainer.append(strategySpriteContainer)
-    strategyContainer.append(strategyTagsContainer)
 
-    for(let i = 0; i < strategy["tags"].length; i++){
-        strategyTagsContainer.append(createStrategyTags(sanitizeString(strategy["tags"][i].trim())))
+    if(strategy["tags"].length > 0){
+        for(let i = 0; i < strategy["tags"].length; i++){
+            strategyTagsContainer.append(createStrategyTags(sanitizeString(strategy["tags"][i].trim())))
+        }
+        strategyContainer.append(strategyTagsContainer)
     }
 
     strategyMoves.append(strategyMovesTable)
@@ -639,22 +641,22 @@ function createStrategyTags(tag){
     const strategyTag = document.createElement("span"); strategyTag.className = "strategyTag"
 
     if(tag === "Defensive"){
-        strategyTag.innerText = "🛡️ Defensive"
+        strategyTag.innerText = "Defensive"
     }
     else if(tag === "Offensive"){
-        strategyTag.innerText = "⚔️ Offensive"
+        strategyTag.innerText = "Offensive"
     }
     else if(tag === "Singles"){
-        strategyTag.innerText = "1️⃣ Singles"
+        strategyTag.innerText = "Singles"
     }
     else if(tag === "Doubles"){
-        strategyTag.innerText = "2️⃣ Singles"
+        strategyTag.innerText = "Singles"
     }
     else if(tag === "Mixed"){
-        strategyTag.innerText = "⛈️ Singles"
+        strategyTag.innerText = "Singles"
     }
     else if(tag === "Troll"){
-        strategyTag.innerText = "🤣 Singles"
+        strategyTag.innerText = "Troll"
     }
     else{
         strategyTag.innerText = tag
