@@ -636,10 +636,7 @@ function createStrategyMisc(label, value, speciesName){
     const miscValue = document.createElement("td"); miscValue.className = "strategyData"
 
     miscLabel.innerText = `${label}:`
-    if(label === "Ability"){
-        miscValue.innerText = sanitizeString(species[speciesName]["abilities"][value])
-    }
-    else if(label === "EVs"){
+    if(label === "EVs"){
         for(let i = 0; i < value.length; i++){
             if(value[i] > 0){
                 if(!miscValue.innerText == ""){

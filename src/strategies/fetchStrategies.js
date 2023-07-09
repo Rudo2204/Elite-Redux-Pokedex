@@ -14,7 +14,7 @@ async function buildStrategiesObj(){
     
     strategies = await getStrategies(strategies)
 
-    await localStorage.setItem("strategies", LZString.compressToUTF16(JSON.stringify(strategies)))
+    //await localStorage.setItem("strategies", LZString.compressToUTF16(JSON.stringify(strategies)))
     return strategies
 }
 

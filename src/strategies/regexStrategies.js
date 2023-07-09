@@ -1,54 +1,69 @@
 async function regexStrategies(textStrategies, strategies){
     const lines = textStrategies.split("\n")
     let name = null, inBracket = false
-    const regex = /.name|.heldItem|.ability|.evs|.nature|.moves|.comment/i
 
     lines.forEach(line => {
         line = line.trim()
 
-        if(!inBracket){
-            matchSpecies = line.match(/SPECIES_\w+/i)
-            if(matchSpecies){
-                name = matchSpecies[0]
+        if(line === "{"){
+            if(name){
+                inBracket = true
+                createAndInitializeSetForSpecies(strategies, name)
             }
-            else if(`SPECIES_${line.toUpperCase().replaceAll(" ", "_")}` in species){
-                console.log(line)
-            }
-        }
-
-        else if(line === "{"){
-            inBracket = true
-            createAndInitializeSetForSpecies(strategies, name)
         }
         else if(line === "}," || line === "}"){
             inBracket = false
             name = null
         }
-
+        else if(!inBracket){
+            matchSpecies = line.match(/SPECIES_\w+/i)
+            if(matchSpecies){
+                name = matchSpecies[0]
+            }
+            else if(`SPECIES_${line.toUpperCase().replaceAll(" ", "_")}` in species){
+                name = `SPECIES_${line.toUpperCase().replaceAll(" ", "_")}`
+            }
+        }
         else if(inBracket){
-            matchRegex = line.match(regex)
-            if(matchRegex){
-                const match = matchRegex[0]
                 
-                const i = strategies[name].length - 1
+            const i = strategies[name].length - 1
 
-                if(match === ".evs"){
-                    strategies[name][i]["evs"] = line.match(/\d+/g)
-                }
-                else if(match === ".ability"){
-                    strategies[name][i]["ability"] = parseInt(line.match(/\d+/)[0])
-                }
-                else if(match === ".name"){
-                    strategies[name][i]["name"] = line.match(/= *(.*)$/)[1].trim() // regex is fun
-                }
-                else if(match === ".heldItem"){
+            if(/name *=/i.test(line)){
+                strategies[name][i]["name"] = line.match(/= *(.*)$/)[1].trim() // regex is fun
+            }
+            else if(/item *=/i.test(line)){
+                if(/ITEM_\w+/i.test(line)){
                     strategies[name][i]["item"] = line.match(/ITEM_\w+/i)[0]
                 }
-                else if(match === ".nature"){
+                else{
+                    strategies[name][i]["item"] = line.match(/= *(.*)/i)[1]
+                }
+            }
+            if(/ability *=/i.test(line)){
+                if(/= *\d+/i.test(line)){
+                    strategies[name][i]["ability"] = species[name]["abilities"][parseInt(line.match(/\d+/)[0])]
+                }
+                else{
+                    strategies[name][i]["ability"] = line.match(/= *(.*)/i)[1]
+                }
+            }
+            if(/evs *=/i.test(line)){
+                strategies[name][i]["evs"] = line.match(/\d+/g)
+            }
+            if(/nature *=/i.test(line)){
+                if(/ITEM_\w+/i.test(line)){
                     strategies[name][i]["nature"] = line.match(/NATURE_\w+/i)[0]
                 }
-                else if(match === ".moves"){
+                else{
+                    strategies[name][i]["nature"] = line.match(/= *(.*)/i)[1]
+                }
+            }
+            if(/moves *=/i.test(line)){
+                if(/MOVE_\w+/i.test(line)){
                     strategies[name][i]["moves"] = line.match(/MOVE_\w+/gi)
+                }
+                else{
+                    strategies[name][i]["moves"] = line.match(/= *(.*)/i)[1].split(",")
                 }
             }
         }
