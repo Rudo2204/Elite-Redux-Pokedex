@@ -574,6 +574,8 @@ function replaceStatString(stat){
 function createSpeciesStrategy(strategy, speciesName){
     const strategyContainer = document.createElement("div")
     const strategyName = document.createElement("h3"); strategyName.className = "strategyName"
+    const strategySpriteContainer = document.createElement("span"); strategySpriteContainer.className = "strategySpriteContainer"
+    const strategySprite = document.createElement("img"); strategySprite.className = `miniSprite sprite${speciesName} strategySprite`
     const strategyInfo = document.createElement("div"); strategyInfo.className = "strategyInfo"
     const strategyMoves = document.createElement("div"); strategyMoves.className = "strategyTableContainer"
     const strategyMovesTable = document.createElement("table"); strategyMovesTable.className = "strategyTable"
@@ -581,9 +583,13 @@ function createSpeciesStrategy(strategy, speciesName){
     const strategyMisc = document.createElement("div"); strategyMisc.className = "strategyTableContainer"
     const strategyMiscTable = document.createElement("table"); strategyMiscTable.className = "strategyTable"
     const strategyMiscTbody = document.createElement("Tbody")
+    const strategyComment = document.createElement("div"); strategyComment.className = "strategyComment"
     
     strategyName.innerText = strategy["name"]
-    strategyContainer.append(strategyName)
+    strategySpriteContainer.append(strategySprite)
+    strategySprite.src = sprites[speciesName]
+    strategySpriteContainer.append(strategyName)
+    strategyContainer.append(strategySpriteContainer)
 
     strategyMoves.append(strategyMovesTable)
     strategyMovesTable.append(strategyMovesTbody)
@@ -598,9 +604,11 @@ function createSpeciesStrategy(strategy, speciesName){
     strategyMiscTbody.append(createStrategyMisc("Nature", strategy["nature"], speciesName))
     strategyMiscTbody.append(createStrategyMisc("EVs", strategy["evs"], speciesName))
 
+    strategyComment.innerText = strategy["comment"]
 
     strategyInfo.append(strategyMoves)
     strategyInfo.append(strategyMisc)
+    strategyInfo.append(strategyComment)
     strategyContainer.append(strategyInfo)
     
 
@@ -618,7 +626,12 @@ function createStrategyMove(num, move){
     const moveName = document.createElement("td"); moveName.className = "strategyData"
 
     moveNum.innerText = `Move ${num + 1}:`
-    moveName.innerText = sanitizeString(move)
+    if(/\//.test(move)){
+        moveName.innerText = move.trim()
+    }
+    else{
+        moveName.innerText = sanitizeString(move)
+    }
     moveContainer.append(moveNum)
     moveContainer.append(moveName)
     return moveContainer

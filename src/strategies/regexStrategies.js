@@ -1,6 +1,6 @@
 async function regexStrategies(textStrategies, strategies){
     const lines = textStrategies.split("\n")
-    let name = null, inBracket = false
+    let name = null, inBracket = false, inComment = false
 
     lines.forEach(line => {
         line = line.trim()
@@ -13,6 +13,7 @@ async function regexStrategies(textStrategies, strategies){
         }
         else if(line === "}," || line === "}"){
             inBracket = false
+            inComment = false
             name = null
         }
         else if(!inBracket){
@@ -39,7 +40,7 @@ async function regexStrategies(textStrategies, strategies){
                     strategies[name][i]["item"] = line.match(/= *(.*)/i)[1]
                 }
             }
-            if(/ability *=/i.test(line)){
+            else if(/ability *=/i.test(line)){
                 if(/= *\d+/i.test(line)){
                     strategies[name][i]["ability"] = species[name]["abilities"][parseInt(line.match(/\d+/)[0])]
                 }
@@ -47,23 +48,43 @@ async function regexStrategies(textStrategies, strategies){
                     strategies[name][i]["ability"] = line.match(/= *(.*)/i)[1]
                 }
             }
-            if(/evs *=/i.test(line)){
+            else if(/evs *=/i.test(line)){
                 strategies[name][i]["evs"] = line.match(/\d+/g)
             }
-            if(/nature *=/i.test(line)){
-                if(/ITEM_\w+/i.test(line)){
+            else if(/nature *=/i.test(line)){
+                if(/NATURE_\w+/i.test(line)){
                     strategies[name][i]["nature"] = line.match(/NATURE_\w+/i)[0]
                 }
                 else{
                     strategies[name][i]["nature"] = line.match(/= *(.*)/i)[1]
                 }
             }
-            if(/moves *=/i.test(line)){
+            else if(/moves *=/i.test(line)){
                 if(/MOVE_\w+/i.test(line)){
                     strategies[name][i]["moves"] = line.match(/MOVE_\w+/gi)
                 }
                 else{
                     strategies[name][i]["moves"] = line.match(/= *(.*)/i)[1].split(",")
+                }
+            }
+            else if(/moves *=/i.test(line)){
+                if(/MOVE_\w+/i.test(line)){
+                    strategies[name][i]["moves"] = line.match(/MOVE_\w+/gi)
+                }
+                else{
+                    strategies[name][i]["moves"] = line.match(/= *(.*)/i)[1].split(",")
+                }
+            }
+            else if(/comment *=/i.test(line) && !inComment){
+                strategies[name][i]["comment"] = line.match(/= *(.*)/i)[1]
+                inComment = true
+            }
+            else if(inComment){
+                if(/^\w+ *=/i.test(line) || line === "}," || line === "}"){
+                    inComment = false
+                }
+                else{
+                    strategies[name][i]["comment"] += line
                 }
             }
         }
