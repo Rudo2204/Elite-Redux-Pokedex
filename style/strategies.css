@@ -25,7 +25,7 @@
 
 .strategyLabel {
     text-align: right;
-    display: ruby;
+    white-space: nowrap;
 }
 
 .strategyData {
