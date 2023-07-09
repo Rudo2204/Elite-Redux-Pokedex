@@ -21,8 +21,8 @@ async function regexStrategies(textStrategies, strategies){
             if(matchSpecies){
                 name = matchSpecies[0]
             }
-            else if(`SPECIES_${line.toUpperCase().replaceAll(" ", "_")}` in species){
-                name = `SPECIES_${line.toUpperCase().replaceAll(" ", "_")}`
+            else if(`SPECIES_${line.toUpperCase().replaceAll(/-|'| |_/g, "_")}` in species){
+                name = `SPECIES_${line.toUpperCase().replaceAll(/-|'| |_/g, "_")}`
             }
         }
         else if(inBracket){
