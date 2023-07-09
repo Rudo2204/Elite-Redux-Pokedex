@@ -6,9 +6,14 @@ async function regexStrategies(textStrategies, strategies){
     lines.forEach(line => {
         line = line.trim()
 
-        matchSpecies = line.match(/SPECIES_\w+/i)
-        if(matchSpecies){
-            name = matchSpecies[0]
+        if(!inBracket){
+            matchSpecies = line.match(/SPECIES_\w+/i)
+            if(matchSpecies){
+                name = matchSpecies[0]
+            }
+            else if(`SPECIES_${line.toUpperCase().replaceAll(" ", "_")}` in species){
+                console.log(line)
+            }
         }
 
         else if(line === "{"){
@@ -17,6 +22,7 @@ async function regexStrategies(textStrategies, strategies){
         }
         else if(line === "}," || line === "}"){
             inBracket = false
+            name = null
         }
 
         else if(inBracket){
@@ -46,11 +52,13 @@ async function regexStrategies(textStrategies, strategies){
                 }
             }
         }
+        /*
         else if(name){
             if(line !== ""){
                 strategies[name]["overview"] += line
             }
         }
+        */
     })
 
     return strategies
@@ -61,7 +69,7 @@ async function regexStrategies(textStrategies, strategies){
 function createAndInitializeSetForSpecies(strategies, name){
     if(!strategies[name]){
         strategies[name] = []
-        strategies[name]["overview"] = ""
+        //strategies[name]["overview"] = ""
     }
 
     strategies[name].push({})
