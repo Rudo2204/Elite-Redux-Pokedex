@@ -594,7 +594,9 @@ function createSpeciesStrategy(strategy, speciesName){
 
     if(strategy["tags"].length > 0){
         for(let i = 0; i < strategy["tags"].length; i++){
-            strategyTagsContainer.append(createStrategyTags(sanitizeString(strategy["tags"][i].trim())))
+            const strategyTag = document.createElement("span"); strategyTag.className = "strategyTag"
+            strategyTag.innerText = strategy["tags"][i].trim()
+            strategyTagsContainer.append(strategyTag)
         }
         strategyContainer.append(strategyTagsContainer)
     }
@@ -634,36 +636,6 @@ function createSpeciesStrategy(strategy, speciesName){
 
 
 
-
-
-
-function createStrategyTags(tag){
-    const strategyTag = document.createElement("span"); strategyTag.className = "strategyTag"
-
-    if(tag === "Defensive"){
-        strategyTag.innerText = "Defensive"
-    }
-    else if(tag === "Offensive"){
-        strategyTag.innerText = "Offensive"
-    }
-    else if(tag === "Singles"){
-        strategyTag.innerText = "Singles"
-    }
-    else if(tag === "Doubles"){
-        strategyTag.innerText = "Singles"
-    }
-    else if(tag === "Mixed"){
-        strategyTag.innerText = "Singles"
-    }
-    else if(tag === "Troll"){
-        strategyTag.innerText = "Troll"
-    }
-    else{
-        strategyTag.innerText = tag
-    }
-
-    return strategyTag
-}
 
 
 

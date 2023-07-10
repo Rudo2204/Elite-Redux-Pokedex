@@ -76,7 +76,12 @@ async function regexStrategies(textStrategies, strategies){
                 }
             }
             else if(/tags *=/i.test(line)){
-                strategies[name][i]["tags"] = line.match(/= *(.*)/i)[1].split(",")
+                if(/,/.test(line)){
+                    strategies[name][i]["tags"] = line.match(/= *(.*)/i)[1].split(",")
+                }
+                else{
+                    strategies[name][i]["tags"].push(line)
+                }
             }
             else if(/comment *=/i.test(line) && !inComment){
                 strategies[name][i]["comment"].push(line.match(/= *(.*)/i)[1])
