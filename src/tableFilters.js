@@ -121,6 +121,19 @@ function filterMovesSplit(value, label){
     }
 }
 
+function filterMovesFlags(value, label){
+    mainLoop: for(let i = 0, j = tracker.length; i < j; i++){
+        let name = tracker[i]["key"]
+
+        for(let k = 0; k < moves[name]["flags"].length; k++){
+            if((sanitizeString(moves[name]["flags"][k]) === value)){
+                continue mainLoop
+            }   
+        }
+        tracker[i]["filter"].push(`filter${label}${value}`.replaceAll(" ", ""))
+    }
+}
+
 function filterBaseStats(value, label){
     if(value === "HP"){
         value = "baseHP"
@@ -216,6 +229,9 @@ function selectFilter(value, label){
     else if(label === "Base Stats"){
         filterBaseStats(value, label)
     }
+    else if(label === "Flag"){
+        filterMovesFlags(value, label)
+    }
 }
 
 
@@ -227,6 +243,7 @@ async function setFilters(){
     createFilterGroup(["Mega", "Alolan", "Galarian", "Hisuian"], "Form", [speciesFilterList, locationsFilterList])
     createFilterGroup(createFilterArray(["type"], moves), "Type", [speciesFilterList, movesFilterList, locationsFilterList])
     createFilterGroup(createFilterArray(["split"], moves), "Split", [movesFilterList])
+    createFilterGroup(createFilterArray(["flags"], moves), "Flag", [movesFilterList])
     createFilterGroup(createFilterArray(["item1", "item2"], species), "Item", [speciesFilterList, locationsFilterList])
     createFilterGroup(createFilterArray(["ingameName"], abilities, false), "Ability", [speciesFilterList, locationsFilterList])
     createFilterGroup(createFilterArray(["ingameName"], moves, false), "Move", [speciesFilterList, locationsFilterList])
@@ -373,11 +390,23 @@ function createFilterArray(objInputArray, obj, sanitize = true){
         for (let i = 0; i < objInputArray.length; i++){
             if(!ignore.includes(name)){
                 let value = obj[name][objInputArray[i]]
-                if(sanitize){
-                    value = sanitizeString(value)
+                if(Array.isArray(value)){
+                    for(let j = 0; j < value.length; j++){
+                        if(sanitize){
+                            value[j] = sanitizeString(value[j])
+                        }
+                        if(!list.includes(value[j])){
+                            list.push(value[j])
+                        }
+                    }
                 }
-                if(!list.includes(value)){
-                    list.push(value)
+                else{
+                    if(sanitize){
+                        value = sanitizeString(value)
+                    }
+                    if(!list.includes(value)){
+                        list.push(value)
+                    }
                 }
             }
         }

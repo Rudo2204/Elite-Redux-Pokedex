@@ -1,6 +1,7 @@
 #speciesPanelCloseButton {
 	float: right;
 	background-color: red;
+	border: none !important;
 }
 
 #speciesPanelMainContainer {

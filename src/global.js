@@ -13,6 +13,8 @@ const openCredits = document.getElementById("openCredits")
 const closeCredits = document.getElementById("closeCredits")
 const modal = document.getElementById("modal")
 const update = document.getElementById("update")
+const overlay = document.getElementById('overlay')
+const popup = document.getElementById('popup')
 
 const patchnoteModeCheckbox = document.getElementById("patchnoteModeCheckbox")
 const onlyShowChangedPokemonCheckbox = document.getElementById("onlyShowChangedPokemonCheckbox")
@@ -475,6 +477,13 @@ function utilityButtonOnClick(){
     }
 }
 
+
+
+overlay.addEventListener('click', function (event) {
+    if (event.target === overlay) {
+        overlay.style.display = 'none'
+    }
+})
 
 
 

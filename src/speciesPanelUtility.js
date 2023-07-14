@@ -783,6 +783,12 @@ function buildSpeciesPanelLearnsetsTable(Tbody, name, input){
         for (let j = 0; j < moves[species[name][input][i][0]]["description"].length; j++){
             description.innerText += moves[species[name][input][i][0]]["description"][j].replace("\\n", " ")
         }
+
+        row.addEventListener('click', function () {
+            createPopupForMove(moves[species[name][input][i][0]])
+            overlay.style.display = 'block'
+        }) 
+
         row.append(description)
 
         Tbody.append(row)
@@ -843,6 +849,12 @@ function buildSpeciesPanelEggMovesTable(Tbody, name, input){
         for (let j = 0; j < moves[species[name][input][i]]["description"].length; j++){
             description.innerText += moves[species[name][input][i]]["description"][j].replace("\\n", " ")
         }
+
+        row.addEventListener('click', function () {
+            createPopupForMove(moves[species[name][input][i]])
+            overlay.style.display = 'block'
+        }) 
+
         row.append(description)
 
         Tbody.append(row)
