@@ -651,7 +651,7 @@ function createStrategyMove(num, move){
     const moveName = document.createElement("td"); moveName.className = "strategyData"
 
     moveNum.innerText = `Move ${num + 1}:`
-    if(/\//.test(move)){
+    if(/\/|\(|\)/.test(move)){
         moveName.innerText = move.trim()
     }
     else{
@@ -696,7 +696,12 @@ function createStrategyMisc(label, value, speciesName){
         }
     }
     else{
-        miscValue.innerText = sanitizeString(value)
+        if(/\/|\(|\)/.test(value)){
+            miscValue.innerText = value.trim()
+        }
+        else{
+            miscValue.innerText = sanitizeString(value)
+        }
     }
     miscContainer.append(miscLabel)
     miscContainer.append(miscValue)
