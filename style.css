@@ -99,8 +99,9 @@ input[type="search"]:focus, input[type="search"]:hover {
 }
 
 @media (hover: hover) {
-    #table > table > thead > tr > th:hover {
+    #table > table > thead > tr > th:hover, #speciesPanelMainContainer th:hover{
         background: rgba(113, 117, 126, 0.336);
+        cursor: pointer;
     }
     #speciesTableTbody tr:hover, #abilitiesTableTbody tr:hover, #movesTableTbody tr:hover, #locationsTableTbody tr:hover, 
     #speciesPanelLevelUpTableTbody tr:hover, #speciesPanelTMHMTableTbody tr:hover, #speciesPanelTutorTableTbody tr:hover, #speciesPanelEggMovesTableTbody tr:hover {

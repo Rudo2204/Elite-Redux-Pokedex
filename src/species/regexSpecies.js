@@ -373,7 +373,7 @@ function regexTMHMLearnsets(textTMHMLearnsets, species){
                 move = "SOLAR_BEAM" // Fuck Oldplayer :)
             move = `MOVE_${move}`
 
-            species[name]["TMHMLearnsets"].push([move, TMHM])
+            species[name]["TMHMLearnsets"].push(/*[move, TMHM]*/move)
         }
     })
 
