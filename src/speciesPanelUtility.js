@@ -25,7 +25,8 @@ const speciesHeldItems = document.getElementById("speciesHeldItems")
 const speciesChanges = document.getElementById("speciesChanges")
 const speciesHeldItemsContainer = document.getElementById("speciesHeldItemsContainer")
 const speciesChangesContainer = document.getElementById("speciesChangesContainer")
-const speciesTypeChart = document.getElementById("speciesTypeChart")
+const speciesDefensiveTypeChart = document.getElementById("speciesDefensiveTypeChart")
+const speciesOffensiveTypeChart = document.getElementById("speciesOffensiveTypeChart")
 const speciesStrategiesContainer = document.getElementById("speciesStrategiesContainer")
 const speciesStrategies = document.getElementById("speciesStrategies")
 const speciesPanelLevelUpTable = document.getElementById("speciesPanelLevelUpTable")
@@ -57,7 +58,7 @@ async function createSpeciesPanel(name){
         speciesType2.classList.remove("hide")
 
     
-        if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
+    if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
         speciesType3.innerText = sanitizeString(speciesHasType3(species[name]))
         speciesType3.className = `${speciesHasType3(species[name])} background`
         speciesType3.classList.remove("hide")
@@ -308,37 +309,82 @@ async function createSpeciesPanel(name){
 
 
 
-    while (speciesTypeChart.firstChild)
-        speciesTypeChart.removeChild(speciesTypeChart.firstChild)
+
+
+    while (speciesDefensiveTypeChart.firstChild)
+        speciesDefensiveTypeChart.removeChild(speciesDefensiveTypeChart.firstChild)
 
     Object.keys(typeChart).forEach(type => {
-        const typeEffectivenessContainer = document.createElement("span")
+        const defensiveTypeEffectivenessContainer = document.createElement("span")
         const checkType = document.createElement("span")
-        const typeEffectivenessValue = document.createElement("span")
-        typeEffectivenessContainer.className = "flex flexCenter flexColumn speciesTypeChartMarginTop"
+        const defensiveTypeEffectivenessValue = document.createElement("span")
+        defensiveTypeEffectivenessContainer.className = "flex flexCenter flexColumn speciesDefensiveTypeChartMarginTop"
         checkType.innerText = sanitizeString(type)
         checkType.className = `background2 ${type}`
         if((species[name]["type1"] !== species[name]["type2"]) && species[name]["type2"] !== undefined){
             if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
-                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][species[name]["type2"]]*typeChart[type][speciesHasType3(species[name])]
+                defensiveTypeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][species[name]["type2"]]*typeChart[type][speciesHasType3(species[name])]
             }
             else{
-                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][species[name]["type2"]]
+                defensiveTypeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][species[name]["type2"]]
             }
         }
         else{
             if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
-                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][speciesHasType3(species[name])]
+                defensiveTypeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]*typeChart[type][speciesHasType3(species[name])]
             }
             else{
-                typeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]
+                defensiveTypeEffectivenessValue.innerText = typeChart[type][species[name]["type1"]]
             }
         }
-        typeEffectivenessValue.className = `typeChart${typeEffectivenessValue.innerText} background3`
-        typeEffectivenessContainer.append(checkType)
-        typeEffectivenessContainer.append(typeEffectivenessValue)
-        speciesTypeChart.append(typeEffectivenessContainer)
+        defensiveTypeEffectivenessValue.className = `typeChartDefensive${defensiveTypeEffectivenessValue.innerText} background3`
+        defensiveTypeEffectivenessContainer.append(checkType)
+        defensiveTypeEffectivenessContainer.append(defensiveTypeEffectivenessValue)
+        speciesDefensiveTypeChart.append(defensiveTypeEffectivenessContainer)
     })
+
+
+
+
+
+
+
+
+
+
+    while (speciesOffensiveTypeChart.firstChild)
+        speciesOffensiveTypeChart.removeChild(speciesOffensiveTypeChart.firstChild)
+
+    Object.keys(typeChart).forEach(type => {
+        let offensiveValue = 0
+        const offensiveTypeEffectivenessContainer = document.createElement("span")
+        const checkType = document.createElement("span")
+        const offensiveTypeEffectivenessValue = document.createElement("span")
+        offensiveTypeEffectivenessContainer.className = "flex flexCenter flexColumn speciesOffensiveTypeChartMarginTop"
+        checkType.innerText = sanitizeString(type)
+        checkType.className = `background2 ${type}`
+
+        offensiveValue = typeChart[species[name]["type1"]][type]
+        if(species[name]["type2"] !== undefined){
+            if(typeChart[species[name]["type2"]][type] > typeChart[species[name]["type1"]][type]){
+                offensiveValue = typeChart[species[name]["type2"]][type]
+            }
+        }
+        if(speciesHasType3(species[name])){
+            if(typeChart[speciesHasType3(species[name])][type] > typeChart[species[name]["type1"]][type] || typeChart[speciesHasType3(species[name])][type] > typeChart[species[name]["type2"]][type]){
+                offensiveValue = typeChart[speciesHasType3(species[name])][type]
+            }
+        }
+        offensiveTypeEffectivenessValue.innerText = offensiveValue
+
+        offensiveTypeEffectivenessValue.className = `typeChartOffensive${offensiveTypeEffectivenessValue.innerText} background3`
+        offensiveTypeEffectivenessContainer.append(checkType)
+        offensiveTypeEffectivenessContainer.append(offensiveTypeEffectivenessValue)
+        speciesOffensiveTypeChart.append(offensiveTypeEffectivenessContainer)
+    })
+
+
+
 
 
 
