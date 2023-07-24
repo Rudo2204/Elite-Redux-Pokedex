@@ -285,68 +285,214 @@ async function displayHistoryObj(historyStateObj){
 
 
 function speciesCanLearnMove(speciesObj, moveName){
-    if("levelUpLearnsets" in speciesObj){
-        for(let i = 0; i < speciesObj["levelUpLearnsets"].length; i++){
-            if(typeof(speciesObj["levelUpLearnsets"][i]) == "object"){
-                if(speciesObj["levelUpLearnsets"][i][0] == moveName){
-                    return true
+    const index = ["levelUpLearnsets", "TMHMLearnsets", "eggMovesLearnsets", "tutorLearnsets"]
+    for(let i = 0; i < index.length; i++){
+        if(index[i] in speciesObj){
+            for(let j = 0; j < speciesObj[index[i]].length; j++){
+                if(typeof(speciesObj[index[i]][j]) == "object"){
+                    if(speciesObj[index[i]][j][0] == moveName){
+                        return true
+                    }
                 }
-            }
-            else if(typeof(speciesObj["levelUpLearnsets"][i] == "string")){
-                if(speciesObj["levelUpLearnsets"][i] == moveName){
-                    return true
-                }
-            }
-        }
-    }
-    if("TMHMLearnsets" in speciesObj){
-        for(let i = 0; i < speciesObj["TMHMLearnsets"].length; i++){
-            if(typeof(speciesObj["TMHMLearnsets"][i]) == "object"){
-                if(speciesObj["TMHMLearnsets"][i][0] == moveName){
-                    return true
-                }
-            }
-            else if(typeof(speciesObj["TMHMLearnsets"][i] == "string")){
-                if(speciesObj["TMHMLearnsets"][i] == moveName){
-                    return true
+                else if(typeof(speciesObj[index[i]][j] == "string")){
+                    if(speciesObj[index[i]][j] == moveName){
+                        return true
+                    }
                 }
             }
         }
     }
-    if("eggMovesLearnsets" in speciesObj){
-        for(let i = 0; i < speciesObj["eggMovesLearnsets"].length; i++){
-            if(typeof(speciesObj["eggMovesLearnsets"][i]) == "object"){
-                if(speciesObj["eggMovesLearnsets"][i][0] == moveName){
-                    return true
-                }
-            }
-            else if(typeof(speciesObj["eggMovesLearnsets"][i] == "string")){
-                if(speciesObj["eggMovesLearnsets"][i] == moveName){
-                    return true
-                }
-            }
-        }
-    }
-    if("tutorLearnsets" in speciesObj){
-        for(let i = 0; i < speciesObj["tutorLearnsets"].length; i++){
-            if(typeof(speciesObj["tutorLearnsets"][i]) == "object"){
-                if(speciesObj["tutorLearnsets"][i][0] == moveName){
-                    return true
-                }
-            }
-            else if(typeof(speciesObj["tutorLearnsets"][i] == "string")){
-                if(speciesObj["tutorLearnsets"][i] == moveName){
-                    return true
-                }
-            }
-        }
-    }
+
     return false
 }
 
 
 
 
+
+
+
+
+
+
+function speciesCanLearnType(speciesObj, type){
+    const index = ["levelUpLearnsets", "TMHMLearnsets", "eggMovesLearnsets", "tutorLearnsets"]
+    const atk = speciesObj["baseAttack"]
+    const spAtk = speciesObj["baseSpAttack"]
+    let split = false
+    let total = 0
+
+    if(atk > spAtk){
+        if(atk / spAtk < 1.3){
+            split = "mixed"
+        }
+        else{
+            split = "SPLIT_PHYSICAL"
+        }
+    }
+    else{
+        if(spAtk / atk < 1.3){
+            split = "mixed"
+        }
+        else{
+            split = "SPLIT_SPECIAL"
+        }
+    }
+
+    let duplicateArray = []
+    let move = "MOVE_NONE"
+    for(let i = 0; i < index.length; i++){
+        if(index[i] in speciesObj){
+            for(let j = 0; j < speciesObj[index[i]].length; j++){
+                if(typeof(speciesObj[index[i]][j]) == "object"){
+                    move = speciesObj[index[i]][j][0]
+                }
+                else if(typeof(speciesObj[index[i]][j] == "string")){
+                    move = speciesObj[index[i]][j]
+                }
+                
+                if(moves[move]["type"] === type && !duplicateArray.includes(move)){
+                    if(split === "mixed" || moves[move]["split"] === split){
+                        duplicateArray.push(move)
+                        if(moves[move]["power"] > 100){
+                            total += 1
+                        }
+                        else if(moves[move]["power"] >= 80){
+                            total += 1.5
+                        }
+                        else if(moves[move]["power"] >= 60){
+                            total += 0.5
+                        }
+                        else{
+                            total += 0.25
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+
+    return total
+}
+
+
+
+
+
+
+
+
+
+
+
+function getSpeciesBestCoverageTypes(speciesObj){
+    let offensiveTypeChart = {}
+    let speciesCanLearnTypeArray = {}
+    let top3TypesArray = []
+    Object.keys(typeChart).forEach(type => {
+
+        offensiveTypeChart[type] = getPokemonEffectivenessValueAgainstType(speciesObj, type)
+
+        if(type !== speciesObj["type1"] && type !== speciesObj["type2"] && type !== speciesHasType3(speciesObj)){
+            const value = speciesCanLearnType(speciesObj, type)
+            if(value > 0){
+                speciesCanLearnTypeArray[type] = value
+            }
+        }
+    })
+
+    Object.keys(speciesCanLearnTypeArray).forEach(offensiveType => {
+        let total = speciesCanLearnTypeArray[offensiveType]
+
+        if(total > 3){
+            total = 0
+        }
+        else if(total < 0.5){
+            total = -6
+        }
+        else if(total < 1){
+            total = -4
+        }
+        else{
+            total = -2
+        }
+
+        Object.keys(typeChart).forEach(defensiveType => {
+            if(getOffensiveTypeValue(offensiveType, defensiveType) > offensiveTypeChart[defensiveType]){
+
+               total += getOffensiveTypeValue(offensiveType, defensiveType) - offensiveTypeChart[defensiveType]
+
+                if(getPokemonResistanceValueAgainstType(speciesObj, defensiveType) > 1){
+                    total += 0.25
+                    if(getPokemonEffectivenessValueAgainstType(speciesObj, defensiveType) <= 1){
+                        total += 0.5
+                    }
+                }
+
+            }
+            if(getOffensiveTypeValue(offensiveType, defensiveType) === 0 && getPokemonResistanceValueAgainstType(speciesObj, defensiveType) > 1){
+                total -= 0.5
+            }
+        })
+        top3TypesArray.push([offensiveType, total])
+    })
+
+    top3TypesArray.sort((a, b) => {
+        return b[1] - a[1]
+    })
+
+    top3TypesArray = top3TypesArray.filter(n => n[1] >= 5)
+
+    return top3TypesArray.slice(0, 3)
+}
+
+
+
+
+
+
+
+
+
+function getOffensiveTypeValue(offensiveType, defensiveType){
+    return typeChart[offensiveType][defensiveType]
+}
+
+function getPokemonResistanceValueAgainstType(speciesObj, type){
+    if((speciesObj["type1"] !== speciesObj["type2"]) && speciesObj["type2"] !== undefined){
+        if(speciesHasType3(speciesObj) && speciesHasType3(speciesObj) !== speciesObj["type1"] && speciesHasType3(speciesObj) !== speciesObj["type2"]){
+            return typeChart[type][speciesObj["type1"]] * typeChart[type][speciesObj["type2"]] * typeChart[type][speciesHasType3(speciesObj)]
+        }
+        else{
+            return typeChart[type][speciesObj["type1"]] * typeChart[type][speciesObj["type2"]]
+        }
+    }
+    else{
+        if(speciesHasType3(speciesObj) && speciesHasType3(speciesObj) !== speciesObj["type1"] && speciesHasType3(speciesObj) !== speciesObj["type2"]){
+            return typeChart[type][speciesObj["type1"]] * typeChart[type][speciesHasType3(speciesObj)]
+        }
+        else{
+            return typeChart[type][speciesObj["type1"]]
+        }
+    }
+}
+
+function getPokemonEffectivenessValueAgainstType(speciesObj, type){
+    let offensiveValue = typeChart[speciesObj["type1"]][type]
+    if(speciesObj["type2"] !== undefined){
+        if(typeChart[speciesObj["type2"]][type] > typeChart[speciesObj["type1"]][type]){
+            offensiveValue = typeChart[speciesObj["type2"]][type]
+        }
+    }
+    if(speciesHasType3(speciesObj)){
+        if(typeChart[speciesHasType3(speciesObj)][type] > typeChart[speciesObj["type1"]][type] || typeChart[speciesHasType3(speciesObj)][type] > typeChart[speciesObj["type2"]][type]){
+            offensiveValue = typeChart[speciesHasType3(speciesObj)][type]
+        }
+    }
+
+    return offensiveValue
+}
 
 
 
