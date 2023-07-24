@@ -98,14 +98,33 @@ function footerP(input){
 
 function setDataList(){
     window.speciesIngameNameArray = []
-    for(const speciesName in species){
-        if(species[speciesName]["baseSpeed"] <= 0){
+    window.typeCount = {}
+    for(const name in species){
+        if(species[name]["baseSpeed"] <= 0){
             continue
         }
         const option = document.createElement("option")
-        option.innerText = sanitizeString(speciesName)
+        option.innerText = sanitizeString(name)
         speciesIngameNameArray.push(option.innerText)
         speciesPanelInputSpeciesDataList.append(option)
+
+        if(!(species[name]["type1"] in typeCount)){
+            typeCount[species[name]["type1"]] = 0
+        }
+        if(!(species[name]["type2"] in typeCount)){
+            typeCount[species[name]["type2"]] = 0
+        }
+        if(!(speciesHasType3(species[name]) in typeCount)){
+            typeCount[speciesHasType3(species[name])] = 0
+        }
+
+        typeCount[species[name]["type1"]] += 1
+        if(species[name]["type1"] !== species[name]["type2"]){
+            typeCount[species[name]["type2"]] += 1
+        }
+        if(speciesHasType3(species[name]) && speciesHasType3(species[name]) !== species[name]["type1"] && speciesHasType3(species[name]) !== species[name]["type2"]){
+            typeCount[speciesHasType3(species[name])] += 1
+        }
     }
 
     window.abilitiesIngameNameArray = []
@@ -419,21 +438,35 @@ function getSpeciesBestCoverageTypes(speciesObj){
         }
 
         Object.keys(typeChart).forEach(defensiveType => {
+            let value = 0
             if(getOffensiveTypeValue(offensiveType, defensiveType) > offensiveTypeChart[defensiveType]){
 
-               total += getOffensiveTypeValue(offensiveType, defensiveType) - offensiveTypeChart[defensiveType]
+                value += getOffensiveTypeValue(offensiveType, defensiveType) - offensiveTypeChart[defensiveType]
 
-                if(getPokemonResistanceValueAgainstType(speciesObj, defensiveType) > 1){
-                    total += 0.25
-                    if(getPokemonEffectivenessValueAgainstType(speciesObj, defensiveType) <= 1){
-                        total += 0.5
+                if(getOffensiveTypeValue(offensiveType, defensiveType) > 1){
+                    if(getPokemonEffectivenessValueAgainstType(speciesObj, defensiveType) < 1){
+                        value += 0.5
+                    }
+                    else if(getPokemonEffectivenessValueAgainstType(speciesObj, defensiveType) === 1){
+                        value += 0.25
                     }
                 }
+            }
+            
+            if(getPokemonResistanceValueAgainstType(speciesObj, defensiveType) > 1){
+                if(getOffensiveTypeValue(offensiveType, defensiveType) === 0){
+                    value -= 0.5
+                }
+                else if(getOffensiveTypeValue(offensiveType, defensiveType) < 1){
+                    value -= 0.25
+                }
+            }
 
+            if(getOffensiveTypeValue(offensiveType, defensiveType) < 1 && getPokemonEffectivenessValueAgainstType(speciesObj, defensiveType) < 1){
+                value -= 0.25
             }
-            if(getOffensiveTypeValue(offensiveType, defensiveType) === 0 && getPokemonResistanceValueAgainstType(speciesObj, defensiveType) > 1){
-                total -= 0.5
-            }
+
+            total += value * (1 + (typeCount[defensiveType] / Object.keys(species).length))
         })
         top3TypesArray.push([offensiveType, total])
     })

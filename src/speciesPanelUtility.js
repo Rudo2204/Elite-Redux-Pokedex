@@ -347,7 +347,7 @@ async function createSpeciesPanel(name){
         recommendationType.innerText = sanitizeString(type[0])
         recommendationType.className = `background ${type[0]}`
 
-        recommendationScore.innerText = type[1]
+        recommendationScore.innerText = type[1].toFixed(2)
 
         recommendationContainer.append(recommendationType)
         recommendationContainer.append(recommendationScore)
