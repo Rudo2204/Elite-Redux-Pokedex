@@ -519,7 +519,7 @@ function getPokemonEffectivenessValueAgainstType(speciesObj, type){
         }
     }
     if(speciesHasType3(speciesObj)){
-        if(typeChart[speciesHasType3(speciesObj)][type] > typeChart[speciesObj["type1"]][type] || typeChart[speciesHasType3(speciesObj)][type] > typeChart[speciesObj["type2"]][type]){
+        if(typeChart[speciesHasType3(speciesObj)][type] > typeChart[speciesObj["type1"]][type] && typeChart[speciesHasType3(speciesObj)][type] > typeChart[speciesObj["type2"]][type]){
             offensiveValue = typeChart[speciesHasType3(speciesObj)][type]
         }
     }
