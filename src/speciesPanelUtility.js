@@ -301,10 +301,12 @@ async function createSpeciesPanel(name){
             createChange(stat, oldStat, newStat, name, speciesChanges)
         }
     }
-    if(speciesChanges.firstChild)
+    if(speciesChanges.firstChild){
         speciesChangesContainer.classList.remove("hide")
-    else
-        recommendedCoverageContainer.classList.add("hide")
+    }
+    else{
+        speciesChangesContainer.classList.add("hide")
+    }
 
 
 
