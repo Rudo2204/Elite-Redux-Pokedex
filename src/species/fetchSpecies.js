@@ -115,10 +115,6 @@ async function buildSpeciesObj(){
     species = await getSprite(species)
 
     Object.keys(species).forEach(name => {
-        if(species[name]["type1"] === "TYPE_FIRE" || species[name]["type2"] === "TYPE_FIRE"){
-            if(!species[name]["tutorLearnsets"].includes("MOVE_BURN_UP"))
-                species[name]["tutorLearnsets"].push("MOVE_BURN_UP")
-        }
         if(species[name]["type1"] === "TYPE_DRAGON" || species[name]["type2"] === "TYPE_DRAGON"){
             if(!species[name]["tutorLearnsets"].includes("MOVE_DRACO_METEOR"))
                 species[name]["tutorLearnsets"].push("MOVE_DRACO_METEOR")
