@@ -224,5 +224,14 @@ function normalizeMoves(moves){
             moves[move]["priority"] = 0
     }
 
+    Object.keys(moves).forEach(move => {
+        if(moves[move]["priority"] > 0){
+            moves[move]["flags"].push(`Priority Plus ${moves[move]["priority"]}`)
+        }
+        else if(moves[move]["priority"] < 0){
+            moves[move]["flags"].push(`Priority Minus ${moves[move]["priority"]}`)
+        }
+    })
+
     return moves
 }

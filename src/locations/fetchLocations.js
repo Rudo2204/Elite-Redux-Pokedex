@@ -1,5 +1,5 @@
 async function getWildLocations(locations){
-    footerP("Fetching wild locations")
+    footerP("Fetching locations")
     const rawWildLocations = await fetch(`https://raw.githubusercontent.com/${repo}/src/data/wild_encounters.json`)
     const jsonWildLocations = await rawWildLocations.json()
 
@@ -7,7 +7,6 @@ async function getWildLocations(locations){
 }
 
 async function getGameCornerLocations(locations){
-    footerP("Fetching game corner locations")
     const rawGameCornerLocations = await fetch(`https://raw.githubusercontent.com/${repo}/data/maps/MauvilleCity_GameCorner/scripts.inc`)
     const textGameCornerLocations = await rawGameCornerLocations.text()
 
